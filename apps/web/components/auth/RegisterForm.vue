@@ -4,6 +4,9 @@ import { z } from 'zod';
 
 const schema = z.object({
   username: z.string({ required_error: 'To pole jest wymagane' }),
+  email: z
+    .string({ required_error: 'To pole jest wymagane' })
+    .email({ message: 'Wprowadź prawidłowy adres e-mail' }),
 
   password: z
     .string({ required_error: 'To pole jest wymagane' })
@@ -14,13 +17,14 @@ type Schema = z.output<typeof schema>;
 
 const state = reactive({
   username: undefined,
+  email: undefined,
   password: undefined,
 });
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   console.log(event.data);
 
-  const response = await $fetch('http://localhost:5013/api/auth/login', {
+  const response = await $fetch('http://localhost:5013/api/auth/register', {
     method: 'POST',
     body: JSON.stringify(event.data),
   });
@@ -50,13 +54,14 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         >
           <template #header>
             <div class="flex flex-col justify-center items-center">
-              <Icon name="i-heroicons:lock-closed" class="w-8 h-8" />
-              <h1 class="text-2xl font-bold">Witaj ponownie</h1>
+              <Icon name="i-heroicons:user-plus" class="w-8 h-8" />
+
+              <h1 class="text-2xl font-bold">Załóż nowe konto</h1>
 
               <div class="text-gray-500 dark:text-gray-400 mt-1">
-                Nie masz konta?
-                <NuxtLink to="register" class="text-primary font-medium"
-                  >Zarejestruj się</NuxtLink
+                Posiadasz już konto?
+                <NuxtLink to="/login" class="text-primary font-medium"
+                  >Zaloguj się</NuxtLink
                 >.
               </div>
             </div>
@@ -69,10 +74,24 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
           >
             <UFormGroup label="Nazwa użytkownika" name="username">
               <UInput
+                required
                 size="lg"
                 icon="lucide:user"
-                placeholder="np. 403hpns"
+                placeholder="RandomUser44"
                 v-model="state.username"
+                variant="none"
+                class="border border-gray-700/50 rounded"
+              />
+            </UFormGroup>
+
+            <UFormGroup label="E-mail" name="email">
+              <UInput
+                size="lg"
+                icon="lucide:at-sign"
+                placeholder="user@wow.com"
+                v-model="state.username"
+                variant="none"
+                class="border border-gray-700/50 rounded"
               />
             </UFormGroup>
 
@@ -83,7 +102,32 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
                 placeholder="********"
                 v-model="state.password"
                 type="password"
+                variant="none"
+                class="border border-gray-700/50 rounded"
               />
+            </UFormGroup>
+
+            <UFormGroup label="Powtórz hasło" name="password">
+              <UInput
+                size="lg"
+                icon="lucide:lock-keyhole"
+                placeholder="********"
+                v-model="state.password"
+                type="password"
+                variant="none"
+                class="border border-gray-700/50 rounded"
+              />
+            </UFormGroup>
+
+            <UFormGroup>
+              <UCheckbox required>
+                <template #label>
+                  Akceptuję
+                  <span class="font-bold underline cursor-pointer"
+                    >regulamin serwisu</span
+                  >.
+                </template>
+              </UCheckbox>
             </UFormGroup>
 
             <UButton block size="lg" class="font-semibold" type="submit">

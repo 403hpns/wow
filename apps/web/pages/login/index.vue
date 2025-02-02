@@ -1,0 +1,3 @@
+<template>
+  <AuthLoginForm />
+</template>

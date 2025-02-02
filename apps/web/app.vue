@@ -7,6 +7,7 @@ useHead({
 
 <template>
   <NuxtLayout>
+    <ThemeSwitcher />
     <NuxtPage />
   </NuxtLayout>
 </template>
