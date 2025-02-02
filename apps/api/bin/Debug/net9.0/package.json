@@ -1,7 +1,0 @@
-{
-  "name": "api",
-  "scripts": {
-    "build": "dotnet build",
-    "dev": "dotnet serve"
-  }
-}

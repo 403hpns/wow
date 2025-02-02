@@ -13,10 +13,15 @@ coverage
 .output/
 out/
 build
+bin/
+obj/
 
 # misc
 .DS_Store
 *.pem
+.vscode/
+.idea/
+*.log
 
 # debug
 npm-debug.log*
