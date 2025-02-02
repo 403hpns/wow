@@ -29,15 +29,6 @@ namespace WoW.Sevices
             return await CreateTokenResponse(user);
         }
 
-        private async Task<TokenResponseDto> CreateTokenResponse(User user)
-        {
-            return new TokenResponseDto
-            {
-                AccessToken = CreateJwtToken(user),
-                RefreshToken = await GenerateAndSaveRefreshTokenAsync(user)
-            };
-        }
-
         public async Task<User?> RegisterAsync(UserDto userDto)
         {
             if (await context.Users.AnyAsync(u => u.Username == userDto.Username))
@@ -55,17 +46,6 @@ namespace WoW.Sevices
 
             context.Users.Add(user);
             await context.SaveChangesAsync();
-
-            return user;
-        }
-
-        private async Task<User?> ValidateRefreshTokenAsync(int userId, string refreshToken)
-        {
-            var user = await context.Users.FindAsync(userId);
-            if (user is null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
-            {
-                return null;
-            }
 
             return user;
         }
@@ -111,6 +91,29 @@ namespace WoW.Sevices
             return refreshToken;
         }
 
+
+        private async Task<TokenResponseDto> CreateTokenResponse(User user)
+        {
+            return new TokenResponseDto
+            {
+                AccessToken = CreateJwtToken(user),
+                RefreshToken = await GenerateAndSaveRefreshTokenAsync(user)
+            };
+        }
+
+
+        private async Task<User?> ValidateRefreshTokenAsync(int userId, string refreshToken)
+        {
+            var user = await context.Users.FindAsync(userId);
+            if (user is null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
+            {
+                return null;
+            }
+
+            return user;
+        }
+
+
         public async Task<TokenResponseDto?> RefreshTokensAsync(RefreshTokenRequestDto refreshTokenRequestDto)
         {
             var user = await ValidateRefreshTokenAsync(refreshTokenRequestDto.UserId, refreshTokenRequestDto.RefreshToken);
@@ -120,7 +123,20 @@ namespace WoW.Sevices
             }
 
             return await CreateTokenResponse(user);
-       
+
         }
+
+        public async Task<User?> GetUserByIdAsync(int userId)
+        {
+            var user = await context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            if (user is null)
+            {
+                return null;
+            }
+
+            return user;
+        }
+
+
     }
 }

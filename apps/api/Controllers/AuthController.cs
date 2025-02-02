@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WoW.Entities;
 using WoW.Models;
@@ -60,5 +61,38 @@ namespace WoW.Controllers
 
             return Ok(result);
         }
+
+        [Authorize]
+        [HttpGet("me")]
+        public async Task<ActionResult<User>> GetMe()
+        {
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userIdString is null)
+            {
+                return NotFound();
+            }
+
+            if (!int.TryParse(userIdString, out int userId))
+            {
+                return BadRequest("Invalid user ID format.");
+            }
+
+            var user = await authService.GetUserByIdAsync(userId);
+            if (user is null)
+            {
+                return NotFound();
+            }
+
+            var userData = new
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Role = user.Role
+            };
+
+
+            return Ok(userData);
+        }
+
     }
 }

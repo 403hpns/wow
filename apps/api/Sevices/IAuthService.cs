@@ -8,5 +8,6 @@ namespace WoW.Sevices
         Task<User?> RegisterAsync(UserDto userDto);
         Task<TokenResponseDto?> LoginAsync(UserDto userDto);
         Task<TokenResponseDto?> RefreshTokensAsync(RefreshTokenRequestDto refreshTokenRequestDto);
+        Task<User?> GetUserByIdAsync(int userId);
     }
 }

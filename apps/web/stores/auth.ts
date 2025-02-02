@@ -1,3 +1,4 @@
+import { useStorage } from '@vueuse/core';
 import { defineStore } from 'pinia';
 
 interface LoginDto {
@@ -14,9 +15,13 @@ interface RegisterDto {
 const toast = useToast();
 
 export const useAuthStore = defineStore('auth', () => {
+  const token = useStorage('token', '');
+  const refreshToken = useStorage('refreshToken', '');
+
   const isAuthenticated = ref(false);
-  const token = ref();
   const user = ref();
+
+  console.log('%cuseAuth invoked', 'color:red');
 
   async function login(loginDto: LoginDto) {
     const config = useRuntimeConfig().public;
@@ -28,16 +33,14 @@ export const useAuthStore = defineStore('auth', () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(loginDto),
-      })) as { token: string, username: string };
+      })) as { accessToken: string; refreshToken: string };
 
       if (!res) {
         return null;
       }
 
-      token.value = res.token;
-      user.value = { username: res.username };
-
-      return true;
+      token.value = res.accessToken;
+      refreshToken.value = res.refreshToken;
 
       return true;
     } catch (error: any) {
@@ -87,5 +90,25 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  return { login, register, user };
+  async function fetchUser() {
+    const config = useRuntimeConfig().public;
+
+    try {
+      const res = await $fetch(`${config.apiBaseUrl}/api/auth/me`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token.value}`,
+        },
+      });
+
+      user.value = res;
+      return user.value;
+    } catch (error: any) {
+      token.value = null;
+      user.value = null;
+      return null;
+    }
+  }
+
+  return { login, register, user, fetchUser, token };
 });

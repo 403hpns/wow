@@ -32,6 +32,8 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     description: 'Pomyślnie zalogowano się na konto.',
     icon: 'lucide:check',
   });
+
+  await navigateTo('/dashboard');
 }
 </script>
 
