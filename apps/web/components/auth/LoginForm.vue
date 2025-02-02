@@ -17,17 +17,21 @@ const state = reactive({
   password: undefined,
 });
 
+const authStore = useAuthStore();
+const toast = useToast();
+
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  console.log(event.data);
+  const res = await authStore.login(event.data);
 
-  const response = await $fetch('http://localhost:5013/api/auth/login', {
-    method: 'POST',
-    body: JSON.stringify(event.data),
-  });
-
-  if (response) {
-    console.log('Yupi ', response);
+  if (res == null) {
+    return;
   }
+
+  toast.add({
+    title: 'Zalogowano pomyślnie',
+    description: 'Pomyślnie zalogowano się na konto.',
+    icon: 'lucide:check',
+  });
 }
 </script>
 
@@ -73,6 +77,8 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
                 icon="lucide:user"
                 placeholder="np. 403hpns"
                 v-model="state.username"
+                variant="none"
+                class="border border-gray-700/50 rounded"
               />
             </UFormGroup>
 
@@ -83,6 +89,8 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
                 placeholder="********"
                 v-model="state.password"
                 type="password"
+                variant="none"
+                class="border border-gray-700/50 rounded"
               />
             </UFormGroup>
 

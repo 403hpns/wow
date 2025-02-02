@@ -6,4 +6,10 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-02-02',
 
   modules: ['@pinia/nuxt', '@nuxt/ui'],
+
+  runtimeConfig: {
+    public: {
+      apiBaseUrl: 'http://localhost:5013',
+    },
+  },
 });

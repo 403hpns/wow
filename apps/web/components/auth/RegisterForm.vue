@@ -21,17 +21,21 @@ const state = reactive({
   password: undefined,
 });
 
+const authStore = useAuthStore();
+const toast = useToast();
+
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  console.log(event.data);
+  const res = await authStore.register(event.data);
 
-  const response = await $fetch('http://localhost:5013/api/auth/register', {
-    method: 'POST',
-    body: JSON.stringify(event.data),
-  });
-
-  if (response) {
-    console.log('Yupi ', response);
+  if (res == null) {
+    return;
   }
+
+  toast.add({
+    title: 'Utworzono nowe konto',
+    description: 'Twoje konto zostało pomyślnie utworzone.',
+    icon: 'lucide:check',
+  });
 }
 </script>
 
@@ -89,7 +93,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
                 size="lg"
                 icon="lucide:at-sign"
                 placeholder="user@wow.com"
-                v-model="state.username"
+                v-model="state.email"
                 variant="none"
                 class="border border-gray-700/50 rounded"
               />

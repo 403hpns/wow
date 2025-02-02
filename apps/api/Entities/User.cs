@@ -17,7 +17,7 @@ namespace WoW.Entities
         public string PasswordHash { get; set; } = string.Empty;
 
         [Column("role")]
-        public string Role { get; set; } = string.Empty;
+        public string Role { get; set; } = "User";
 
         [Column("refresh_token")]
         public string? RefreshToken { get; set; }

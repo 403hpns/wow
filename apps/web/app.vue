@@ -9,5 +9,7 @@ useHead({
   <NuxtLayout>
     <ThemeSwitcher />
     <NuxtPage />
+
+    <UNotifications />
   </NuxtLayout>
 </template>
