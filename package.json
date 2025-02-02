@@ -1,5 +1,5 @@
 {
-  "name": "with-vue-nuxt",
+  "name": "wow",
   "private": true,
   "scripts": {
     "build": "turbo run build",
