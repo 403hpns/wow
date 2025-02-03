@@ -12,6 +12,12 @@ const tabs = [
     icon: "lucide:sword",
     href: "/dashboard/tactics",
   },
+  {
+    id: "dashboard-raids",
+    name: "Rajdy",
+    icon: "heroicons-user-group-20-solid",
+    href: "/dashboard/raids",
+  },
 ];
 
 const route = useRoute();

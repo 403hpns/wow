@@ -15,7 +15,7 @@ const { title, icon } = defineProps<{
           <Icon :name="icon" class="size-4" />
         </span>
         <p class="font-semibold">{{ title }}</p>
-        <Icon name="lucide:chevron-up" />
+        <Icon name="heroicons-arrow-up-right-20-solid" class="ml-4 size-5" />
       </div>
 
       <div class="leading-none">
