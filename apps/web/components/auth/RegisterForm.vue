@@ -36,6 +36,8 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     description: 'Twoje konto zostało pomyślnie utworzone.',
     icon: 'lucide:check',
   });
+
+  await navigateTo('/login');
 }
 </script>
 
