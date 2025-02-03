@@ -25,6 +25,8 @@
     "eslint-config-custom": "workspace:*",
     "nuxt": "^3.10.3",
     "pinia": "^2.3.0",
+    "prettier": "^3.2.5",
+    "prettier-plugin-tailwindcss": "^0.6.11",
     "tsconfig": "workspace:*",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"
