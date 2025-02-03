@@ -1,26 +1,31 @@
 <script setup lang="ts">
-const tabs = [
+const { t } = useI18n();
+
+const tabs = computed(() => [
   {
     id: "dashboard",
-    name: "Dashboard",
+    name: t("dashboard.sidebar.tabs.dashboard"),
     icon: "lucide:home",
     href: "/dashboard",
   },
   {
     id: "dashboard-tactics",
-    name: "Taktyki",
+    name: t("dashboard.sidebar.tabs.tactics"),
     icon: "lucide:sword",
     href: "/dashboard/tactics",
   },
   {
     id: "dashboard-raids",
-    name: "Rajdy",
+    name: t("dashboard.sidebar.tabs.raids"),
     icon: "heroicons-user-group-20-solid",
     href: "/dashboard/raids",
   },
-];
+]);
 
 const route = useRoute();
+
+const currentRouteName = computed(() => route.name?.toString().split("__")[0]);
+const isActive = (tabId: string) => currentRouteName.value === tabId;
 </script>
 
 <template>
@@ -43,8 +48,8 @@ const route = useRoute();
         class="flex items-center gap-4 rounded-lg px-4 py-2 font-semibold"
         :class="{
           'bg-primary/25 border-primary/50 hover:bg-primary/50 border':
-            route.name === tab.id.toString(),
-          'hover:bg-primary/5': route.name !== tab.id.toString(),
+            isActive(tab.id),
+          'hover:bg-primary/5': !isActive(tab.id),
         }"
       >
         <Icon :name="tab.icon" /> {{ tab.name }}
