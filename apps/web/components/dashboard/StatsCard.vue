@@ -1,23 +1,31 @@
 <script setup lang="ts">
-const { title, description, icon } = defineProps<{
+const { title, icon } = defineProps<{
   title: string;
   icon: string;
-  description: string;
 }>();
 </script>
 
 <template>
-  <UCard class="w-max h-max">
-    <div class="flex gap-4 items-center">
-      <span
-        class="rounded-full flex items-center justify-center bg-primary p-3"
-      >
-        <Icon :name="icon" />
-      </span>
+  <UCard class="h-max w-max">
+    <div class="flex flex-col gap-4">
+      <div class="flex items-center gap-2">
+        <span
+          class="bg-primary/65 flex items-center justify-center rounded-full p-2.5"
+        >
+          <Icon :name="icon" class="size-4" />
+        </span>
+        <p class="font-semibold">{{ title }}</p>
+        <Icon name="lucide:chevron-up" />
+      </div>
 
-      <div class="leading-5">
-        <p class="text-gray-500">Nowych członków</p>
-        <p class="font-semibold">+4 w tym tygodniu</p>
+      <div class="leading-none">
+        <div class="text-4xl font-bold">
+          <slot />
+        </div>
+
+        <div>
+          <slot name="footer" />
+        </div>
       </div>
     </div>
   </UCard>
