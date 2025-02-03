@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import type { FormSubmitEvent } from '#ui/types';
-import { z } from 'zod';
+import type { FormSubmitEvent } from "#ui/types";
+import { z } from "zod";
 
 const schema = z.object({
-  username: z.string({ required_error: 'To pole jest wymagane' }),
+  username: z.string({ required_error: "To pole jest wymagane" }),
 
   password: z
-    .string({ required_error: 'To pole jest wymagane' })
-    .min(8, 'Hasło musi składać się z min. 8 znaków'),
+    .string({ required_error: "To pole jest wymagane" })
+    .min(8, "Hasło musi składać się z min. 8 znaków"),
 });
 
 type Schema = z.output<typeof schema>;
@@ -28,41 +28,43 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   }
 
   toast.add({
-    title: 'Zalogowano pomyślnie',
-    description: 'Pomyślnie zalogowano się na konto.',
-    icon: 'lucide:check',
+    title: "Zalogowano pomyślnie",
+    description: "Pomyślnie zalogowano się na konto.",
+    icon: "lucide:check",
   });
 
-  await navigateTo('/dashboard');
+  await navigateTo("/dashboard");
 }
 </script>
 
 <template>
   <div
-    class="relative min-h-screen max-w-full overflow-x-hidden bg-gradient-to-b from-card from-0% to-background to-[50vh] dark:bg-gray-950/75"
+    class="from-card to-background relative min-h-screen max-w-full overflow-x-hidden bg-gradient-to-b from-0% to-[50vh] dark:bg-gray-950/75"
   >
     <div
-      class="absolute left-1/2 -z-10 ml-[-500px] h-[500px] w-[1000px] rounded-full bg-gradient-to-r from-primary via-background to-highlight opacity-70 blur-[100px]"
+      class="from-primary via-background to-highlight absolute left-1/2 -z-10 ml-[-500px] h-[500px] w-[1000px] rounded-full bg-gradient-to-r opacity-70 blur-[100px]"
     />
     <div
-      class="absolute bottom-0 right-0 -z-10 ml-[-500px] h-[500px] w-[1000px] rounded-full bg-gradient-to-r from-primary via-background to-highlight opacity-25 blur-[150px]"
+      class="from-primary via-background to-highlight absolute bottom-0 right-0 -z-10 ml-[-500px] h-[500px] w-[1000px] rounded-full bg-gradient-to-r opacity-25 blur-[150px]"
     />
 
-    <main class="flex justify-center items-center h-screen">
+    <main class="flex h-screen items-center justify-center">
       <div class="w-full max-w-md">
         <UCard
           :ui="{ background: 'dark:bg-primary/5' }"
           class="rounded-xl backdrop-blur-3xl"
         >
           <template #header>
-            <div class="flex flex-col justify-center items-center">
-              <Icon name="i-heroicons:lock-closed" class="w-8 h-8" />
-              <h1 class="text-2xl font-bold">Witaj ponownie</h1>
+            <div class="flex flex-col items-center justify-center">
+              <Icon name="i-heroicons:lock-closed" class="h-8 w-8" />
+              <h1 class="text-2xl font-bold">
+                {{ $t("auth.login.header.title") }}
+              </h1>
 
-              <div class="text-gray-500 dark:text-gray-400 mt-1">
-                Nie masz konta?
-                <NuxtLink to="register" class="text-primary font-medium"
-                  >Zarejestruj się</NuxtLink
+              <div class="mt-1 text-gray-500 dark:text-gray-400">
+                {{ $t("auth.login.header.noAccount") }}
+                <NuxtLink to="register" class="text-primary font-medium">
+                  {{ $t("auth.login.header.register") }}</NuxtLink
                 >.
               </div>
             </div>
@@ -73,18 +75,24 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
             class="space-y-4"
             @submit="onSubmit"
           >
-            <UFormGroup label="Nazwa użytkownika" name="username">
+            <UFormGroup
+              :label="$t('auth.login.form.name.label')"
+              name="username"
+            >
               <UInput
                 size="lg"
                 icon="lucide:user"
-                placeholder="np. 403hpns"
+                :placeholder="$t('auth.login.form.name.placeholder')"
                 v-model="state.username"
                 variant="none"
-                class="border border-gray-700/50 rounded"
+                class="rounded border border-gray-700/50"
               />
             </UFormGroup>
 
-            <UFormGroup label="Hasło" name="password">
+            <UFormGroup
+              :label="$t('auth.login.form.password.label')"
+              name="password"
+            >
               <UInput
                 size="lg"
                 icon="lucide:lock-keyhole"
@@ -92,27 +100,27 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
                 v-model="state.password"
                 type="password"
                 variant="none"
-                class="border border-gray-700/50 rounded"
+                class="rounded border border-gray-700/50"
               />
             </UFormGroup>
 
             <UButton block size="lg" class="font-semibold" type="submit">
-              Kontynuuj <Icon name="lucide:chevron-right" />
+              {{ $t("utils.continue") }} <Icon name="lucide:chevron-right" />
             </UButton>
 
             <div
-              class="flex items-center align-center text-center w-full flex-row"
+              class="align-center flex w-full flex-row items-center text-center"
             >
               <div
-                class="flex border-gray-200 dark:border-gray-800 w-full border-t border-solid"
+                class="flex w-full border-t border-solid border-gray-200 dark:border-gray-800"
               ></div>
               <div
-                class="font-medium text-gray-700 dark:text-gray-200 flex mx-3 whitespace-nowrap"
+                class="mx-3 flex whitespace-nowrap font-medium text-gray-700 dark:text-gray-200"
               >
-                <span class="text-sm">lub</span>
+                <span class="text-sm"> {{ $t("utils.or") }} </span>
               </div>
               <div
-                class="flex border-gray-200 dark:border-gray-800 w-full border-t border-solid"
+                class="flex w-full border-t border-solid border-gray-200 dark:border-gray-800"
               ></div>
             </div>
 
@@ -121,7 +129,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
               block
               icon="i-simple-icons:battledotnet"
               variant="outline"
-              >Kontynuuj przez Battle.net</UButton
+              >{{ $t("auth.login.footer.battleNet") }}</UButton
             >
           </UForm>
         </UCard>
