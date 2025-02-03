@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const { t } = useI18n();
+const localePath = useLocalePath();
 
 const tabs = computed(() => [
   {
@@ -43,7 +44,7 @@ const isActive = (tabId: string) => currentRouteName.value === tabId;
 
     <nav class="space-y-2 p-4">
       <NuxtLink
-        :to="tab.href"
+        :to="localePath(tab.href)"
         v-for="tab in tabs"
         class="flex items-center gap-4 rounded-lg px-4 py-2 font-semibold"
         :class="{
